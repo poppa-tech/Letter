@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Valentine Book 💌</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:serif&family=Dancing+Script:wght@600&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, #ff4d4d, #ff1a1a, #ff8080);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
+/* Book container */
+.book {
+  width: 90%;
+  max-width: 340px;
+  background: #fff9e6;
+  border-radius: 14px;
+  box-shadow: 0 0 25px rgba(255,182,193,0.7), 0 30px 80px rgba(0,0,0,0.3);
+  padding: 28px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Book spine */
+.book::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 100%;
+  background: linear-gradient(#d18b9c, #b96c7d);
+  border-radius: 14px 0 0 14px;
+}
+
+/* Title style */
+.title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.4em;
+  text-align: center;
+  color: #b94b64;
+  margin-bottom: 18px;
+  animation: heartbeat 2.2s infinite;
+  text-shadow: 0 0 8px rgba(255,182,193,0.8);
+}
+
+/* Page text */
+.letter {
+  font-size: 1.08em;
+  color: #5a3a3a;
+  line-height: 1.75;
+  text-align: center;
+}
+
+/* Bears */
+.bear {
+  font-size: 3.5em;
+  margin: 15px 0;
+  animation: float 2s infinite alternate;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-15px); }
+}
+
+/* Floating stickers */
+.sticker {
+  position: absolute;
+  font-size: 2em;
+  animation: spin 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pages */
+.page {
+  position: absolute;
+  width: 90%;
+  max-width: 340px;
+  height: 70%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff9e6;
+  border-radius: 14px;
+  box-shadow: 0 0 25px rgba(255,182,193,0.7), 0 30px 80px rgba(0,0,0,0.3);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 5;
+}
+
+.page.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.btn {
+  margin: 15px 10px 0 10px;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 50px;
+  background-color: #ff6f91;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s;
+  touch-action: manipulation;
+}
+.btn:hover { transform: scale(1.1); }
+</style>
+</head>
+<body>
+
+<!-- Page 1: Question -->
+<div class="page active" id="page1">
+  <div class="title">Would u be my Valentine?? 💖</div>
+  <div class="bear">🐻🤍🐻</div>
+  <button class="btn" onclick="chooseYes()">Yes 💌</button>
+  <button class="btn" onclick="chooseNo()">No 🫤​</button>
+</div>
+
+<!-- Page 2: Yes Response -->
+<div class="page" id="pageYes">
+  <div class="title">Awww thanks baby 💖💖</div>
+  <div class="letter">Love uu 😘🥰💞</div>
+  <div class="bear">🐻💖🐻</div>
+</div>
+
+<!-- Page 3: No Response -->
+<div class="page" id="pageNo">
+  <div class="title">Aaa... 3laaccch ?? please ? 👉​👈​🥺​</div>
+  <button class="btn" onclick="nextNo()">Next</button>
+</div>
+
+<!-- Page 4: No Final -->
+<div class="page" id="pageNoFinal">
+  <div class="title">Well bessif 3lik 🤷</div>
+  <div class="letter">Here’s a bouquet for you anyway 💐🌸💞</div>
+  <div class="bear">💐</div>
+</div>
+
+<!-- Floating stickers -->
+<div class="sticker" style="top:10%; left:10%">🌸</div>
+<div class="sticker" style="top:15%; left:80%">💖</div>
+<div class="sticker" style="top:70%; left:20%">✨</div>
+<div class="sticker" style="top:60%; left:70%">🌈</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function chooseYes(){ showPage('pageYes'); }
+function chooseNo(){ showPage('pageNo'); }
+function nextNo(){ showPage('pageNoFinal'); }
+
+// Hearts spawn effect for taps
+function spawnHeart(x, y) {
+  const heart = document.createElement("div");
+  heart.className = "floating-heart";
+  heart.innerHTML = "✨";
+  heart.style.left = x + "px";
+  heart.style.top = y + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 600);
+}
+
+document.addEventListener('click', e => spawnHeart(e.clientX, e.clientY));
+document.addEventListener('touchstart', e => {
+  const touch = e.touches[0];
+  spawnHeart(touch.clientX, touch.clientY);
+});
+</script>
+
+</body>
+</html>
